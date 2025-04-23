@@ -9,14 +9,85 @@ https://www.luogu.com.cn/problem/P1966
 
 离散化+排序+置换+逆序对
 */
-#include<bits/stdc++.h>
+#include<iostream>
+#include<cstdio>
+#include<algorithm>
 using namespace std;
-
-
-int main(){
-
-  return 0;
+int read()
+{
+	int xx=0,fh=1;
+	char ch=getchar();
+	while(ch>'9'||ch<'0')
+	{
+		if(ch=='-') fh=-1;
+		ch=getchar();
+	}
+	while(ch>='0'&&ch<='9')
+	{
+		xx=xx*10+ch-'0';
+		ch=getchar();
+	}
+	return fh==-1?-xx:xx;
 }
+const long long mod=99999997;
+struct node{
+	int ys;
+	int pm;
+	int bh;
+}a1[100010],a2[100010];
+bool cmp1(node x,node y)
+{
+	return x.ys<y.ys;
+}
+bool cmp2(node x,node y)
+{
+	return x.bh<y.bh;
+}
+int yxj[100010],n;
+long long tr[100010],ans;
+long long qm(long long x)
+{
+	while(x>=mod) x-=mod;
+	while(x<0) x+=mod;
+	return x;
+}
+int lbt(int x)
+{
+	return x&-x;
+}
+void xg(int i,long long x)
+{
+	for(;i<=n;i+=lbt(i))
+	tr[i]=qm(tr[i]+x);
+}
+long long xw(int i)
+{
+	long long sum=0;
+	for(;i>0;i-=lbt(i))
+	sum=qm(sum+tr[i]);
+	return sum;
+}
+int main()
+{
+	n=read();
+	for(int i=1;i<=n;++i) a1[i].ys=read(),a1[i].bh=i;
+	for(int i=1;i<=n;++i) a2[i].ys=read(),a2[i].bh=i;
+	sort(a1+1,a1+1+n,cmp1);
+	sort(a2+1,a2+1+n,cmp1);
+	for(int i=1;i<=n;++i) 
+	yxj[i]=a1[i].bh;
+	for(int i=1;i<=n;++i) a2[i].pm=i;
+	sort(a2+1,a2+1+n,cmp2);
+	for(int i=1;i<=n;++i)
+	{
+		xg(yxj[a2[i].pm],1);
+		ans=qm(ans+xw(n)-xw(yxj[a2[i].pm]));
+	}
+	printf("%lld",ans);
+	return 0;
+}
+
+// 下面是很久之前自己写的python版本
 mod=10**8-3
 global n,tree
 def lowbit(x):
