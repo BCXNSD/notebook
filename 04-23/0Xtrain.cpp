@@ -17,3 +17,47 @@ int main(){
 
   return 0;
 }
+mod=10**8-3
+global n,tree
+def lowbit(x):
+    return x&(-x)
+def add(x):
+    while x<=n:
+        tree[x]+=1
+        x+=lowbit(x)
+def query(x):
+    ans=0
+    while x>0:
+        ans=(ans+tree[x])%mod
+        x-=lowbit(x)
+    return ans
+
+def get_rank(lst1,lst2):
+    lth=len(lst1)
+    
+    rank=[0]*(lth+1)
+    for i in range(lth):
+        lst1[i]=[lst1[i],i+1]
+        lst2[i]=[lst2[i],i+1]
+    lst1.sort(key=lambda x:x[0])
+    lst2.sort(key=lambda x:x[0])
+    for i in range(lth):
+        rank[lst1[i][1]]=lst2[i][1]
+    return rank
+
+def get_reverse(lst):
+    ans=0
+    for i in range(n):
+        nums=query(lst[i])
+        ans=(ans+i-nums)%mod
+        add(lst[i])
+    return ans
+n=int(input())
+a=list(map(int,input().split()))
+b=list(map(int,input().split()))
+
+tree=[0]*(10**5+10)
+
+rank=get_rank(a,b)
+ans=get_reverse(rank[1:])
+print(ans)
