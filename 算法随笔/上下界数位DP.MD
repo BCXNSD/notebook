@@ -30,3 +30,38 @@ class Solution:
         return dfs(0, True, True)
 
 ```
+// https://leetcode.cn/problems/count-numbers-with-non-decreasing-digits/
+```
+class Solution:
+    def countNumbers(self, l: str, r: str, b: int) -> int:
+        # 把 s 转成 b 进制
+        def trans(s: str) -> List[int]:
+            x = int(s)
+            digits = []
+            while x:
+                x, r = divmod(x, b)
+                digits.append(r)
+            digits.reverse()
+            return digits
+
+        high = trans(r)
+        n = len(high)
+        low = trans(l)
+        low = [0] * (n - len(low)) + low
+
+        @cache
+        def dfs(i: int, pre: int, limit_low: bool, limit_high: bool) -> int:
+            if i == n:
+                return 1
+
+            lo = low[i] if limit_low else 0
+            hi = high[i] if limit_high else b - 1
+
+            res = 0
+            for d in range(max(lo, pre), hi + 1):
+                res += dfs(i + 1, d, limit_low and d == lo, limit_high and d == hi)
+            return res
+
+        return dfs(0, 0, True, True) % 1_000_000_007
+
+```
