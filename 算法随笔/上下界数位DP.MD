@@ -1,4 +1,5 @@
 // https://leetcode.cn/problems/count-the-number-of-powerful-integers/description/
+```
 class Solution:
     def numberOfPowerfulInt(self, start: int, finish: int, limit: int, s: str) -> int:
         high = list(map(int, str(finish)))  # 避免在 dfs 中频繁调用 int()
@@ -27,3 +28,5 @@ class Solution:
             return res
 
         return dfs(0, True, True)
+
+```
